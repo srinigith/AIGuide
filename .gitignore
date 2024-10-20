@@ -1,0 +1,17 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/AIGuide/FileContentIndex
+/.vs/AIGuide/v17
+/obj/Any CPU/Debug
+/.vs/AIGuide-git/FileContentIndex
+/.vs/AIGuide-git/v17
+/.vs
+/AIGuide/__pycache__/views.cpython-39.pyc
+/AIGuide/Objects/__pycache__
+/AIGuide/AIModels/__pycache__
+/AIGuide/pages/__pycache__
+/AIGuide/__pycache__/__init__.cpython-39.pyc
+/__pycache__/config.cpython-39.pyc
+/__pycache__/runserver.cpython-39.pyc

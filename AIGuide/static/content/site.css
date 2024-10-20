@@ -1,0 +1,123 @@
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+    background-color: #363c46;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 100%;
+}
+
+/* styles for validation helpers */
+.field-validation-error {
+    color: #b94a48;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+input.input-validation-error {
+    border: 1px solid #b94a48;
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}
+
+.validation-summary-errors {
+    color: #b94a48;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+.container {
+    max-width: 100%;
+}
+
+.navbar-inverse {
+    background-color: #416a8d;
+    border-color: #01172e;
+    color: #01172e
+}
+
+    .navbar-inverse .navbar-brand {
+        color: #e2f0fb !important;
+        font-size: 1.65em;
+    }
+
+.navbar > .container .navbar-brand {
+    margin-left: 0;
+    font-weight: 400;
+}
+
+.footer p {
+    color: #ffffff !important;
+}
+
+.read-highlight {
+    color: #a7ff00;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    margin-bottom: 0.5rem;
+    color:#fff;
+}
+
+form input {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 240px;
+}
+
+form button {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 4px;
+    background-color: #cfcfcf;
+    color: #000;
+    cursor: pointer;
+    width: 240px;
+}
+
+form button:hover {
+    background-color: #9da0bb;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    text-align: left;
+}
+
+table th {
+    background-color: #f4f4f4;
+}
+
+h2
+{
+    color:#fff;
+}

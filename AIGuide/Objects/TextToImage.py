@@ -1,0 +1,1 @@
+model = "jbilcke-hf/flux-dev-panorama-lora-2"

@@ -1,0 +1,245 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="jumbotronf" style="padding: 1em; padding-top: 2em; width: 100%; clear: both; position: relative">
+    <!--<h4>Speak or type for your result</h4>-->
+    <textarea id="txtPrompt" style="width:100%; padding:10px; padding-right:8em; height: 80px;border-radius:1em;border:solid 2px #0094ff"></textarea>
+    <div style="position:absolute;right:30px;top:33px">
+        <a style="font-size: 3em" id="btnSpeak" class="speak"><i id="icnSpeak" class="bi bi-mic"></i></a>
+        <a style="font-size: 3em" id="btnAsk" class=""><i class="bi bi-hand-thumbs-up"></i></a>
+    </div>    
+    <input type="hidden" value="NO" id="hdnKeeprun" />
+</div>
+<div class="jumbotronf" style="padding:1em">
+    <!--<h4>Speak or type for your result</h4>-->
+    <div style="position: absolute; color: #b6ff00; right: 3em; margin-top: 0.5em;">
+        <a style="font-size: 1.5em; color: #b6ff00" id="btnSpeak" class="speak"><i id="icnSpeak" class="bi bi-play"></i></a>
+        <a style="font-size: 1.5em; color: #b6ff00" id="btnAsk" class=""><i class="bi bi-pause"></i></a>
+        <a style="font-size: 1.5em; color: #b6ff00" id="btnAsk" class=""><i class="bi bi-stop"></i></a>
+        <span style="color:#0094ff">|</span>
+        <a style="font-size: 1.5em; color: #b6ff00" id="btnClrResult" class=""><i class="bi bi-eraser"></i></a>
+        <a style="font-size: 1.5em; color: #b6ff00" id="btnhtmlSave" class=""><i class="bi bi-filetype-html"></i></a>
+    </div>
+    <div id="txtResp" style="letter-spacing:1px;word-spacing:3px; font-size:1.5em; color: #fff; height: 580px; overflow-y: auto; padding: 10px; border-radius: 1em; border: solid 2px #b4bdd4; background-color:#242427;"></div>
+    <a style="font-size: 1.5em; color: #b6ff00" id="btnMore">More...</a>
+</div>
+
+<script type="text/javascript">
+    function uuidv4() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+            .replace(/[xy]/g, function (c) {
+                const r = Math.random() * 16 | 0,
+                    v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+    }
+
+    var client_id = uuidv4()
+
+    $(document).ready(function () {
+
+        $("#btnSpeak").click(function () {
+            var isStopped = true;
+            var url = "/home/speak/start";
+            //$("#hdnKeeprun").val("YES");
+            //keepRunWhile();
+            if (!$(this).hasClass("speak")) {
+                url = "/home/speak/stop";
+                $(this).css("color", "#428bca");
+                $("#icnSpeak").attr("class", "bi bi-mic")
+                isStopped = true;
+            }
+            else {
+                //$(this).text("Stop");
+                $(this).css("color", "#99062d");
+                $("#icnSpeak").attr("class", "bi bi-stop-circle")
+            }
+
+            $(this).toggleClass("speak");
+
+            $.get(url,
+                function (data, status) {
+                    console.log(data.airesp);
+                    if (isStopped === true) {
+                        //$("#hdnKeeprun").val("NO");
+                        console.log(data.airesp);
+                        //$("#txtPrompt").val(data.airesp);
+                    }
+                }
+            );
+        });
+
+        $("#btnMore").click(function () {
+            var url = "/home/askmore";
+            $.get(url,
+                function (data, status) {
+                    console.log(data.airesp);                    
+                }
+            );
+        });
+
+        $("#btnhtmlSave").click(function () {
+            var url = "/home/save/html";
+            $.get(url,
+                function (data, status) {
+                    console.log(data.airesp);
+                }
+            );
+        });
+
+    });
+
+    ////function keepRunWhile() {
+    ////    setInterval(null, 5000);
+    //    while ($("#hdnKeeprun").val() == "YES") {
+    //        setTimeout(function () {
+    //            keepread();
+    //        }, 2000);
+    //    }
+    ////}
+
+    //function keepread() {
+    //    url = "/home/read";
+    //    $.get(url,
+    //        function (data, status) {
+    //            $("#txtPrompt").val(data.airesp);
+    //        }
+    //    );
+    //}
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+
+        //Set ClientId
+        $.get("/home/setclient/" + client_id,
+            function (data, status) {
+                console.log(data.airesp);
+            }
+        );
+
+        var socket = io();
+        socket.on('connect', function () {
+            console.log('Connected to server');
+        });
+        socket.on('message', function (msg) {
+            console.log('Message received: ' + msg);
+            $("#txtPrompt").val($("#txtPrompt").val() + msg + ". ");
+        });
+        socket.on('disconnect', function () {
+            console.log('Disconnected from server');
+        });
+        socket.on('Cust_resp' + client_id, function (data, from) {
+            //console.log('Cust_resp Message received: ' + data.data);
+            $("#txtPrompt").val($("#txtPrompt").val() + data.data + ". ");
+        });
+        socket.on('Cust_resp_audio' + client_id, function (data, from) {
+            console.log('Cust_resp audio Message received: ' + data.data);            
+        });
+        socket.on('Cust_resp_AI' + client_id, function (data, from) {
+            //console.log('Cust_resp_AI Message received: ' + data.data);
+            $("#txtResp").append(data.data);
+            setCopyBtn();
+            //$("#txtResp").find("SVG").attr("fill", "#fff");
+        });
+        socket.on('Cust_resp_select' + client_id, function (data, from) {
+            console.log('Cust_resp_select Message received: ' + data.data);
+            //var srcWords = data.data.trim().split(' ');
+            //var twoWords = srcWords[0] + " " + srcWords[1]
+            /*$("h1").css("color", "#fff");
+            $("h2").css("color", "#fff");
+            $("p").css("color", "#fff");
+            $("li").css("color", "#fff");
+
+            $("h1:contains('" + data.data.trim() + "')").focus();
+            $("h2:contains('" + data.data.trim() + "')").focus();
+            $("p:contains('" + data.data.trim() + "')").focus();
+            $("li:contains('" + data.data.trim() + "')").focus();*/
+
+            /*$("h1:contains('" + data.data.trim() + "')").css("color", "#f00");
+            $("h2:contains('" + data.data.trim() + "')").css("color", "#f00");
+            $("p:contains('" + data.data.trim() + "')").css("color", "#f00");
+            $("li:contains('" + data.data.trim() + "')").css("color", "#f00");*/
+
+            $("*").removeClass("read-highlight");
+
+            //$('*').each(function () {
+            $("*:contains('" + data.data.trim() + "')").addClass("read-highlight");
+            //});
+
+        });
+        function sendMessage(message) {
+            //var msg = document.getElementById('message').value;
+            socket.send(message);
+        }
+
+        //Dom Events
+        document.getElementById("btnAsk").addEventListener('click', (event) => {
+            //$("#btnSpeak").text("Speak");
+            $("#txtResp").val("");
+            $("#btnSpeak").addClass("speak");
+            //$("#hdnKeeprun").val("NO");
+            /*$.get("/home/ask/" + $("#txtPrompt").val(),
+                function (data, status) {
+                    //$("#txtResp").val(data.airesp)
+                }
+            );*/
+
+            var prmpt = $("#txtPrompt").val();
+            var reqst = { "prompt": prmpt };
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                url: '/home/ask',
+                dataType: 'json',
+                data: JSON.stringify(reqst),
+                success: (data) => {
+                    //console.log('isChat response: ' + data)
+                    $("#txtPrompt").val("");
+                },
+                error: (data) => {
+                    console.log(data)
+                }
+            });
+        });
+
+        document.getElementById("btnClrResult").addEventListener("click", (event) => {
+            document.getElementById("txtResp").innerHTML = "";
+        });
+    });
+
+    function setCopyBtn() {
+        const copyButtonLabel = "Copy Code";
+
+        // use a class selector if available
+        let blocks = document.querySelectorAll("pre");
+
+        blocks.forEach((block) => {
+            // only add button if browser supports Clipboard API
+
+            if (navigator.clipboard) {
+                let button = document.createElement("button");
+                button.style.color = "#000"; // set text color to white
+                //button.style.width = "30px";
+                //button.style.height = "30px";
+                button.style.margin = "2em auto";
+                button.style.textAlign = "right";
+                button.innerText = 'Copy';
+                block.appendChild(button);
+
+                button.addEventListener("click", async () => {
+                    await copyCode(block);
+                });
+            }
+        });
+    }
+
+    async function copyCode(block) {
+        let code = block.querySelector("code");
+        let text = code.innerText;
+
+        await navigator.clipboard.writeText(text);
+    }
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+
+{% block content %}
+	
+<section id="form">
+    <h2>Loan Application</h2>
+    <form>
+        <label for="name">Loan#:</label>
+        <!--<input type="text" id="loanno" name="loanno">
+        <label for="name">Applicant First Name:</label>
+        <input type="text" id="fname" name="fname">
+        <label for="name">Applicant Last Name:</label>
+        <input type="text" id="lname" name="lname">
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email">-->
+        <label for="Gender">Gender:</label>
+        <input type="text" id="Gender" name="Gender" value="Male">
+        <label for="Married">Married:</label>
+        <input type="text" id="Married" name="Married" value="Yes">
+        <label for="Dependents">Dependents:</label>
+        <input type="text" id="Dependents" name="Dependents" value="2">
+        <label for="Education">Education:</label>
+        <input type="text" id="Education" name="Education" value="Graduate">
+        <label for="Self_Employed">Self_Employed:</label>
+        <input type="text" id="Self_Employed" name="Self_Employed" value="No">
+        <label for="ApplicantIncome">ApplicantIncome:</label>
+        <input type="text" id="ApplicantIncome" name="ApplicantIncome" value="3073">
+        <label for="LoanAmount">CoapplicantIncome:</label>
+        <input type="text" id="CoapplicantIncome" name="CoapplicantIncome" value="8106">
+        <label for="LoanAmount">LoanAmount:</label>
+        <input type="text" id="LoanAmount" name="LoanAmount" value="200">
+        <label for="Loan_Amount_Term">Loan_Amount_Term:</label>
+        <input type="text" id="Loan_Amount_Term" name="Loan_Amount_Term" value="360">
+        <label for="Credit_History">Credit_History:</label>
+        <input type="text" id="Credit_History" name="Credit_History" value="1">
+        <label for="Property_Area">Property_Area:</label>
+        <input type="text" id="Property_Area" name="Property_Area" value="Urban">
+        <!--<label for="email">Loan_Status:</label>
+        <input type="text" id="email" name="email">-->
+
+        <br>
+        <button type="button" id="btnValidate">Validate</button>
+        <br>
+        <label id="lblStatus">{{loan_status}}</label>
+    </form>
+</section>
+<!--<section id="table">
+    <h2>Table Section</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>John Doe</td>
+                <td>john@example.com</td>
+            </tr>
+            <tr>
+                <td>Jane Smith</td>
+                <td>jane@example.com</td>
+            </tr>
+        </tbody>
+    </table>
+</section>-->
+<script type="text/javascript">
+    document.getElementById("btnValidate").addEventListener("click", (event) => {
+        event.preventDefault();
+        var serialized = $('form').serializeArray();
+        var s = '';
+        var data = {};
+        for (s in serialized) {
+            data[serialized[s]['name']] = serialized[s]['value']
+        }
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json',
+            url: '/loanapp/validate',
+            dataType: 'json',
+            data: JSON.stringify(data),
+            success: (data) => {
+                console.log('isChat response: ' + data.airesp);
+                var result = "Not Eligible";
+                if (data)
+                {
+                    if (data.airesp == "1") {
+                        result = "Eligible";
+                    }
+                }
+                $("#lblStatus").text("Your loan application is " + result);
+            },
+            complete: (data) => {
+                console.log('Complete response: ' + data);
+            },
+            error: (data) => {
+                console.log(data)
+            }
+        });
+    });
+</script>
+{% endblock %}
