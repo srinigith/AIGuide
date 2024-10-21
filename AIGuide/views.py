@@ -154,8 +154,8 @@ def lLamaResp(prompt,isHtml):
                 "role": "user",
                 "content": frmPrompt
             }
-        ]            
-        #client = Groq(api_key="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")
+        ]
+        
         completion = GetGroqResponse(prompt)
 
         # result = ""
