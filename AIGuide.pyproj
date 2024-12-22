@@ -34,7 +34,9 @@
     <Compile Include="AIGuide\AIModels\XGBoostRegressorModel.py" />
     <Compile Include="AIGuide\AIModels\XGBoostModel.py" />
     <Compile Include="AIGuide\Objects\TextToImage.py" />
+    <Compile Include="AIGuide\Objects\torchrag.py" />
     <Compile Include="AIGuide\pages\loanapp.py" />
+    <Compile Include="AIGuide\prompts\guide_prompt.py" />
     <Compile Include="config.py" />
     <Compile Include="runserver.py" />
     <Compile Include="AIGuide\__init__.py" />
@@ -42,8 +44,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AIGuide\" />
-    <Folder Include="AIGuide\data\" />
     <Folder Include="AIGuide\AIModels\" />
+    <Folder Include="AIGuide\prompts\" />
+    <Folder Include="AIGuide\static\audio\" />
+    <Folder Include="AIGuide\static\scripts\3.7.1\" />
+    <Folder Include="AIGuide\static\scripts\socket.io\" />
+    <Folder Include="AIGuide\static\scripts\socket.io\4.0.0\" />
+    <Folder Include="uploads\" />
     <Folder Include="AIGuide\pages\" />
     <Folder Include="AIGuide\Objects\" />
     <Folder Include="AIGuide\static\" />
@@ -55,12 +62,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".env" />
-    <Content Include="AIGuide\data\12th_Chemistry_Vol_2.pdf" />
     <Content Include="AIGuide\pages\analize.py" />
+    <Content Include="AIGuide\static\audio\temp.mp3" />
+    <Content Include="AIGuide\static\content\bootstrap-icons.css" />
+    <Content Include="AIGuide\static\content\iguide-slider.css" />
+    <Content Include="AIGuide\static\scripts\3.7.1\jquery.min.js" />
+    <Content Include="AIGuide\static\scripts\iguide-slider.js" />
+    <Content Include="AIGuide\static\scripts\socket.io\4.0.0\socket.io.js" />
     <Content Include="AIGuide\templates\analize.html" />
     <Content Include="data\loan_data.csv" />
     <Content Include="AIGuide\templates\loanapp.html" />
-    <Content Include="data\12th_Chemistry_Vol_2.pdf" />
+    <Content Include="data\temp.mp3" />
     <Content Include="requirements.txt" />
     <Content Include="AIGuide\static\content\bootstrap.css" />
     <Content Include="AIGuide\static\content\bootstrap.min.css" />

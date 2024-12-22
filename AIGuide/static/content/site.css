@@ -121,3 +121,32 @@ h2
 {
     color:#fff;
 }
+
+.github-md {
+    height: 580px;
+    padding: 1em;
+    margin: 1.5em;
+    overflow-y: auto;
+    line-height: 1.5em;
+    letter-spacing: 1px;
+    word-spacing: 3px;
+    font-size: 1em;
+    color: #fff;
+    background:none;
+}
+
+.seperator {
+    color: #0094ff
+}
+
+.playerHolder {
+    position: absolute;
+    color: #b6ff00;
+    right: 1em;
+    top: -1em;
+}
+
+.intractBtn {
+    font-size: 1.5em;
+    color: #b6ff00
+}

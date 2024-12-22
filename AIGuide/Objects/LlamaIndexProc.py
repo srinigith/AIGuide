@@ -63,8 +63,8 @@ def GetGroqResponse(prompt):
     return result
 
 def GetQueryResponse(query, parsedData = None, filePath = ""):
-    if parsedData is None:        
-        parsedData = LlamaParse(result_type="text",api_key=config("LLMINDEX_API_KEY")).load_data(filePath)
+    if filePath is not None and filePath != "":        
+        parsedData = LlamaParse(result_type="html",api_key=config("LLMINDEX_API_KEY")).load_data(filePath)
     else:
         #evalJson = eval(parsedData)
         text_list = [str(parsedData),]
@@ -100,7 +100,7 @@ def GetQueryResponse(query, parsedData = None, filePath = ""):
     [summary_tool,vector_tool],select_multi=False,verbose=True,llm=llm)
 
     response = query_engine.query(query)
-    return response
+    return response.response
 
 def GetQueryMultyResp(query, parsedData):
     llm = Groq(model="llama3-8b-8192")
