@@ -20,7 +20,7 @@ from llama_index.core.indices.query.query_transform.base import (
 nest_asyncio.apply()
 os.environ["GROQ_API_KEY"] = config("GROQ_API_KEY")
 
-#docs_12thChem = LlamaParse(result_type="text",api_key="llx-iO5EuwOiOP3ciFLqTe8ViFw3GBPb7EvWEVG23JCzbLeKzaFQ").load_data("data/12th_Chemistry_Vol_2.pdf")
+#docs_12thChem = LlamaParse(result_type="text",api_key="llx-iO5--------------------------KzaFQ").load_data("data/12th_Chemistry_Vol_2.pdf")
 #docs_12thChem = SimpleDirectoryReader(input_files=["data/12th_Chemistry_Vol_2.pdf"]).load_data()
 
 #response = llm.complete("Give an introduction on IONIC EQUILIBRIUM from loaded pdf document in html format.")

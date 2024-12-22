@@ -8,7 +8,7 @@ class GoogleImage:
         self.prompt = prompt
     
     def searchImage(prompt):
-        gis = GoogleImagesSearch("AAAIzaSyBMJkra3UfmE2Ufm-rP0tAs4NZ7euOp52III","Quicservice") #AA.II
+        gis = GoogleImagesSearch("AAA-----------------------52III","Quicservice") #AA.II
     
         _search_params = {
             'q': prompt.prompt,
