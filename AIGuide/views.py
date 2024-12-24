@@ -175,7 +175,7 @@ def lLamaResp(prompt,isHtml,history = ""):
             - The image tag should be rendered from available and free sources; add a suitable text image tag's alt attribute.
             - The code blocks should be clearly rendered and formatted well with suitable colors.
             - Provide the resource information in the response.
-            {passage_history}
+            - Don't respond if the request is irrelevant/illegal or in any harm category [SEXUALLY EXPLICIT, HATE SPEECH, HARASSMENT, DANGEROUS CONTENT].
             """
         
         prompt = [
@@ -187,14 +187,16 @@ def lLamaResp(prompt,isHtml,history = ""):
                 "role": "user",
                 "content": frmPrompt
             }
-        ]
-
-        completion = GetGroqResponse(prompt)
+        ]        
         
-        """RAG
-        if promptResult != "" and isHtml == True:
-            completion = GetQueryResponse(prompt[1]['content'], promptResult)
-        """
+        if history != "" and isHtml == True:
+            queryPrompt = prompt[1]['content']
+            sysAdd = "Refer to passage history from local document storage (RAG) and try to fetch a new additional response from the model."
+            history = sysprompt + "\n\n" + history
+            completion = GetQueryResponse(queryPrompt, history)
+        else:
+            completion = GetGroqResponse(prompt)
+
         if isHtml == True:
             #global promptResult
             promptResult = {"user_request":prompt[1]['content'],"responses": [{"response":completion}]}
@@ -323,7 +325,8 @@ def speak(mode):
     if mode == "start":
         recieve()
     else:
-        stop_listening(wait_for_stop=False)
+        if stop_listening is not None:
+            stop_listening(wait_for_stop=False)
      
     if mode == "stop":
         handle_disconnect()

@@ -22,7 +22,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="/" class="navbar-brand"><i class="bi bi-bookshelf" style="margin-right:0.5em;margin-top:10px"></i><span style="margin-top:5px;">iGuide</span></a>
+                <a href="/" class="navbar-brand"><i class="bi bi-bookshelf" style="display:none;margin-right:0.5em;margin-top:10px"></i><span style="margin-top:5px;">iGuide</span></a>
             </div>
             <!--<div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -40,10 +40,14 @@
             <p>&copy; {{ year }} - iGuide</p>
         </footer>
     </div>
-
+    <div class="loader-container">
+        <div class="loader"></div>
+        <p id="message-1"></p>
+    </div>
     <script src="/static/scripts/jquery-1.10.2.js"></script>
     <script src="/static/scripts/bootstrap.js"></script>
     <script src="/static/scripts/respond.js"></script>
+    <script src="/static/scripts/site.js"></script>
     {% block scripts %}{% endblock %}
 
 </body>

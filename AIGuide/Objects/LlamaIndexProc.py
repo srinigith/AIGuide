@@ -1,5 +1,5 @@
 import groq
-from llama_index.core import query_engine
+from llama_index.core import prompts, query_engine
 import nest_asyncio
 from decouple import config
 import os
@@ -62,7 +62,7 @@ def GetGroqResponse(prompt):
         result += chunk.choices[0].delta.content or ""
     return result
 
-def GetQueryResponse(query, parsedData = None, filePath = ""):
+def GetQueryResponse(query, parsedData = None, filePath = "", router = True):
     if filePath is not None and filePath != "":        
         parsedData = LlamaParse(result_type="html",api_key=config("LLMINDEX_API_KEY")).load_data(filePath)
     else:
@@ -73,7 +73,8 @@ def GetQueryResponse(query, parsedData = None, filePath = ""):
     
     llm = Groq(model="llama3-8b-8192")
     #llm_70b = Groq(model="llama3-70b-8192")
-    embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
+    #embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
+    embed_model = HuggingFaceEmbedding(model_name="google/Gemma-Embeddings-v1.0")
 
     Settings.llm = llm
     Settings.embed_model = embed_model
@@ -84,23 +85,33 @@ def GetQueryResponse(query, parsedData = None, filePath = ""):
     """
     index = VectorStoreIndex.from_documents(parsedData)
     sum_index = SummaryIndex.from_documents(parsedData)
-    vector_tool = QueryEngineTool(index.as_query_engine(),
-                              metadata=ToolMetadata(
-                                  name='vector_search',
-                                  description='Useful for searching for specific facts.')
-                              )
+
+    result = ""
+
+    if router == True:
+        vector_tool = QueryEngineTool(index.as_query_engine(),
+                                  metadata=ToolMetadata(
+                                      name='vector_search',
+                                      description='Useful for searching for specific facts.')
+                                  )
     
-    summary_tool = QueryEngineTool(sum_index.as_query_engine(response_mode="tree_summarize"),
-                               metadata=ToolMetadata(
-                                   name='summary',
-                                   description='Useful for summarizing an entire document.')
-                               )
+        summary_tool = QueryEngineTool(sum_index.as_query_engine(response_mode="tree_summarize"),
+                                   metadata=ToolMetadata(
+                                       name='summary',
+                                       description='Useful for summarizing an entire document.')
+                                   )
 
-    query_engine = RouterQueryEngine.from_defaults(
-    [summary_tool,vector_tool],select_multi=False,verbose=True,llm=llm)
+        query_engine = RouterQueryEngine.from_defaults(
+        [summary_tool,vector_tool],select_multi=False,verbose=True,llm=llm)
 
-    response = query_engine.query(query)
-    return response.response
+        response = query_engine.query(query)
+        result = response.response
+    else:
+        query_engine = index.as_query_engine(similarity_top_k=3,llm=llm)
+        response = query_engine(query)
+        result = response.response
+
+    return result
 
 def GetQueryMultyResp(query, parsedData):
     llm = Groq(model="llama3-8b-8192")
